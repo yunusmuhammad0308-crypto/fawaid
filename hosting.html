@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Praktik Mandiri Keperawatan — Ns. Ahmad Fawaid</title>
+  <style>
+    :root {
+      --bg-app: radial-gradient(circle at top left, #0c2d48, #080d17 55%, #05080f 100%);
+      --surface: rgba(15, 23, 42, 0.84);
+      --surface-solid: #0f172a;
+      --surface-elevated: rgba(30, 41, 59, 0.65);
+      --surface-hover: rgba(51, 65, 85, 0.45);
+      --border: rgba(148, 163, 184, 0.16);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --primary: #0ea5e9;
+      --primary-dark: #0284c7;
+      --primary-glow: rgba(14, 165, 233, 0.22);
+      --wa: #22c55e;
+      --wa-dark: #16a34a;
+      --income: #10b981;
+      --income-bg: rgba(16, 185, 129, 0.14);
+      --expense: #f43f5e;
+      --expense-bg: rgba(244, 63, 94, 0.14);
+      --shadow: 0 22px 44px -12px rgba(0, 0, 0, 0.58);
+    }
+
+    [data-theme="light"] {
+      --bg-app: linear-gradient(135deg, #f0f9ff 0%, #e2e8f0 100%);
+      --surface: rgba(255, 255, 255, 0.94);
+      --surface-solid: #ffffff;
+      --surface-elevated: #f8fafc;
+      --surface-hover: #f1f5f9;
+      --border: rgba(15, 23, 42, 0.1);
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+      --primary: #0284c7;
+      --primary-dark: #0369a1;
+      --primary-glow: rgba(2, 132, 199, 0.15);
+      --income: #059669;
+      --income-bg: rgba(5, 150, 105, 0.12);
+      --expense: #e11d48;
+      --expense-bg: rgba(225, 29, 72, 0.12);
+      --shadow: 0 18px 36px -14px rgba(15, 23, 42, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg-app);
+      color: var(--text-primary);
+      padding: 22px 16px 80px;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(14px);
+      padding: 14px 18px;
+      border-radius: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 13px;
+      background: linear-gradient(135deg, #0ea5e9, #10b981);
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-weight: 800;
+      font-size: 1.15rem;
+      box-shadow: 0 8px 18px rgba(14, 165, 233, 0.28);
+    }
+
+    .brand-title h1 {
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    .brand-title p {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-nav {
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      padding: 8px 13px;
+      border-radius: 10px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-nav:hover {
+      border-color: var(--primary);
+      transform: translateY(-1px);
+    }
+
+    .btn-nav.primary {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+    }
+
+    /* ================= PUBLIC PORTAL (PASIEN) ================= */
+    .hero-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(16px);
+      border-radius: 20px;
+      padding: 28px 24px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--income-bg);
+      color: var(--income);
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 999px;
+      margin-bottom: 12px;
+    }
+
+    .dot-live {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--income);
+      box-shadow: 0 0 8px var(--income);
+    }
+
+    .hero-left h2 {
+      font-size: 1.65rem;
+      line-height: 1.25;
+      margin-bottom: 10px;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-left p {
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .info-chips {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 0.84rem;
+      color: var(--text-secondary);
+      margin-bottom: 18px;
+    }
+
+    .btn-wa-hero {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      background: linear-gradient(135deg, var(--wa), var(--wa-dark));
+      color: #fff;
+      text-decoration: none;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 12px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 10px 22px rgba(34, 197, 94, 0.28);
+      transition: transform 0.15s, opacity 0.2s;
+    }
+
+    .btn-wa-hero:hover {
+      opacity: 0.94;
+      transform: translateY(-1px);
+    }
+
+    .booking-box {
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px;
+    }
+
+    .booking-box h3 {
+      font-size: 1.02rem;
+      margin-bottom: 4px;
+    }
+
+    .booking-box p {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-bottom: 14px;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .service-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .service-card.full-span {
+      grid-column: 1 / -1;
+    }
+
+    .service-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    .service-icon {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+
+    .service-card h4 {
+      font-size: 0.98rem;
+      margin-bottom: 5px;
+    }
+
+    .service-card p {
+      font-size: 0.83rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* Floating WA Button */
+    .wa-float {
+      position: fixed;
+      bottom: 22px;
+      right: 22px;
+      background: linear-gradient(135deg, var(--wa), var(--wa-dark));
+      color: #fff;
+      border: none;
+      padding: 13px 18px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 12px 28px rgba(22, 163, 74, 0.42);
+      cursor: pointer;
+      z-index: 40;
+      text-decoration: none;
+    }
+
+    /* ================= ADMIN / NURSE WORKSPACE ================= */
+    .admin-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .month-picker-box {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 8px 14px;
+      border-radius: 12px;
+    }
+
+    .month-picker-box label {
+      margin: 0;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .month-picker-box input[type="month"] {
+      background: var(--surface-solid);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 0.86rem;
+      font-weight: 600;
+      outline: none;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .kpi-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(14px);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .kpi-title {
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .kpi-value {
+      font-size: 1.35rem;
+      font-weight: 700;
+    }
+
+    .kpi-sub {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .text-income { color: var(--income); }
+    .text-expense { color: var(--expense); }
+
+    /* Monthly Breakdown Panel */
+    .recap-banner {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px 20px;
+      margin-bottom: 20px;
+    }
+
+    .recap-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .recap-top h3 {
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .service-breakdown {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 10px;
+    }
+
+    .breakdown-chip {
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+    }
+
+    .breakdown-chip span:first-child {
+      color: var(--text-secondary);
+      max-width: 65%;
+    }
+
+    .breakdown-chip strong {
+      color: var(--income);
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(16px);
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .form-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .tab-btn {
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--surface-elevated);
+      color: var(--text-secondary);
+      font-size: 0.84rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .tab-btn.active-income {
+      background: var(--income-bg);
+      border-color: var(--income);
+      color: var(--income);
+    }
+
+    .tab-btn.active-expense {
+      background: var(--expense-bg);
+      border-color: var(--expense);
+      color: var(--expense);
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    input[type="password"],
+    input[type="tel"],
+    textarea,
+    select {
+      width: 100%;
+      background: var(--surface-solid);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      outline: none;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-glow);
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 11px;
+      border: none;
+      border-radius: 11px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #fff;
+      cursor: pointer;
+      margin-top: 4px;
+    }
+
+    .btn-submit.income { background: linear-gradient(135deg, #10b981, #059669); }
+    .btn-submit.expense { background: linear-gradient(135deg, #f43f5e, #e11d48); }
+    .btn-submit.primary { background: linear-gradient(135deg, #0ea5e9, #0284c7); }
+
+    .filter-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .filter-controls input { flex: 1; min-width: 180px; }
+    .filter-controls select { width: auto; min-width: 155px; }
+
+    .tx-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 520px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .tx-item {
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      padding: 13px 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .tx-left {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .tx-badge-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .tx-badge-icon.income { background: var(--income-bg); color: var(--income); }
+    .tx-badge-icon.expense { background: var(--expense-bg); color: var(--expense); }
+
+    .tx-title {
+      font-size: 0.94rem;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+
+    .tx-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    .tag {
+      background: rgba(148, 163, 184, 0.12);
+      padding: 2px 7px;
+      border-radius: 5px;
+    }
+
+    .tx-right { text-align: right; flex-shrink: 0; }
+    .tx-amount { font-size: 0.96rem; font-weight: 700; margin-bottom: 4px; }
+
+    .btn-del {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      cursor: pointer;
+      padding: 2px 6px;
+      border-radius: 5px;
+    }
+
+    .btn-del:hover { background: var(--expense-bg); color: var(--expense); }
+
+    .empty-box {
+      text-align: center;
+      padding: 36px 16px;
+      border: 1px dashed var(--border);
+      border-radius: 14px;
+      color: var(--text-muted);
+      font-size: 0.86rem;
+    }
+
+    /* Modals */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 6, 23, 0.76);
+      backdrop-filter: blur(6px);
+      display: none;
+      place-items: center;
+      padding: 16px;
+      z-index: 60;
+    }
+
+    .modal-backdrop.open { display: grid; }
+
+    .modal-box {
+      width: 100%;
+      max-width: 420px;
+      background: var(--surface-solid);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .modal-box h3 { font-size: 1.1rem; margin-bottom: 6px; }
+    .modal-box p { font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 14px; }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 22px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--surface-solid);
+      border: 1px solid var(--primary);
+      color: var(--text-primary);
+      padding: 10px 18px;
+      border-radius: 11px;
+      font-size: 0.84rem;
+      box-shadow: var(--shadow);
+      z-index: 100;
+    }
+
+    @media (max-width: 840px) {
+      .hero-card, .main-grid { grid-template-columns: 1fr; }
+      .services-grid { grid-template-columns: 1fr; }
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 480px) {
+      .kpi-grid { grid-template-columns: 1fr; }
+    }
+
+    @media print {
+      body { background: #fff; color: #000; padding: 0; }
+      .navbar, .admin-toolbar, .panel:first-child, .filter-controls, .btn-del, .wa-float { display: none !important; }
+      .main-grid { grid-template-columns: 1fr; }
+      .kpi-card, .recap-banner, .panel { border: 1px solid #ccc; box-shadow: none; background: #fff; color: #000; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Top Navbar -->
+    <header class="navbar">
+      <div class="brand">
+        <div class="brand-avatar">AF</div>
+        <div class="brand-title">
+          <h1>Ns. Ahmad Fawaid</h1>
+          <p>Praktik Mandiri Keperawatan & Layanan Homecare</p>
+        </div>
+      </div>
+      <div class="nav-actions">
+        <button type="button" class="btn-nav" id="btn-theme">◐ Tema</button>
+        <button type="button" class="btn-nav primary" id="btn-mode-switch">🔐 Mode Perawat</button>
+      </div>
+    </header>
+
+    <!-- =========================================================
+         VIEW 1: PORTAL PASIEN (PUBLIK — BISA DIAKSES SEMUA ORANG)
+         ========================================================= -->
+    <div id="public-view">
+      <section class="hero-card">
+        <div class="hero-left">
+          <div class="status-pill">
+            <span class="dot-live"></span>
+            <span>Menerima Pemeriksaan & Panggilan Homecare</span>
+          </div>
+          <h2>Layanan Kesehatan & Perawatan Profesional</h2>
+          <p>
+            Ditangani langsung oleh <strong>Ns. Ahmad Fawaid</strong>. Melayani pemeriksaan kesehatan umum,
+            perawatan luka, layanan infus, terapi bekam, cek laboratorium dasar, hingga kunjungan perawatan ke rumah pasien.
+          </p>
+          <div class="info-chips">
+            <div>🕒 <strong>Jam Praktik:</strong> <span id="display-hours">Setiap Hari, 07.00 – 21.00 WIB</span></div>
+            <div>📍 <strong>Lokasi:</strong> <span id="display-address">Klinik Praktik Mandiri Ns. Ahmad Fawaid</span></div>
+          </div>
+          <a href="#" target="_blank" rel="noopener" class="btn-wa-hero" id="btn-direct-wa">
+            💬 Chat Langsung via WhatsApp
+          </a>
+        </div>
+
+        <!-- Form Daftar Periksa ke WhatsApp -->
+        <div class="booking-box">
+          <h3>Daftar Periksa / Konsultasi</h3>
+          <p>Isi data singkat di bawah, pesan akan langsung terhubung ke WhatsApp Ns. Ahmad Fawaid.</p>
+          <form id="wa-booking-form">
+            <div class="form-group">
+              <label for="pt-name">Nama Pasien *</label>
+              <input type="text" id="pt-name" placeholder="Masukkan nama lengkap" required />
+            </div>
+            <div class="form-group">
+              <label for="pt-service">Kebutuhan Layanan *</label>
+              <select id="pt-service">
+                <option value="Pemeriksaan Umum & Cek Tensi (TTV)">Pemeriksaan Umum & Cek Tensi (TTV)</option>
+                <option value="Perawatan Luka / Ganti Verban">Perawatan Luka / Ganti Verban</option>
+                <option value="Layanan Infus (Pemasangan / Pelepasan Infus)">Layanan Infus (Pemasangan / Pelepasan Infus)</option>
+                <option value="Terapi Bekam (Hijamah)">Terapi Bekam (Hijamah)</option>
+                <option value="Cek Gula Darah / Kolesterol / Asam Urat">Cek Gula Darah / Kolesterol / Asam Urat</option>
+                <option value="Terapi Uap / Nebulizer">Terapi Uap / Nebulizer</option>
+                <option value="Panggilan Perawat ke Rumah (Homecare)">Panggilan Perawat ke Rumah (Homecare)</option>
+                <option value="Konsultasi Kesehatan Lainnya">Konsultasi Kesehatan Lainnya</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="pt-complaint">Keluhan / Rencana Jam Datang</label>
+              <textarea id="pt-complaint" rows="2" placeholder="Contoh: Mau periksa sore ini jam 16.00 / alamat rumah..."></textarea>
+            </div>
+            <button type="submit" class="btn-wa-hero" style="width: 100%;">
+              Kirim Jadwal ke WhatsApp →
+            </button>
+          </form>
+        </div>
+      </section>
+
+      <!-- Layanan Unggulan -->
+      <section class="services-grid">
+        <div class="service-card">
+          <div class="service-icon">🩺</div>
+          <h4>Pemeriksaan Umum & TTV</h4>
+          <p>Pemeriksaan tekanan darah, suhu tubuh, saturasi oksigen, konsultasi keluhan ringan, dan pemberian terapi.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">🩹</div>
+          <h4>Perawatan Luka</h4>
+          <p>Perawatan luka diabetes, luka pasca operasi, luka bakar, dan ganti verban steril agar cepat pulih.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">💧</div>
+          <h4>Layanan Infus</h4>
+          <p>Pemasangan, pelepasan, serta pemantauan terapi cairan maupun vitamin infus dengan alat steril dan aman.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">🩸</div>
+          <h4>Terapi Bekam</h4>
+          <p>Layanan terapi bekam kering maupun bekam basah (hijamah) secara higienis dan steril untuk membantu menjaga kebugaran tubuh.</p>
+        </div>
+        <div class="service-card full-span">
+          <div class="service-icon">🏠</div>
+          <h4>Layanan Homecare (Kunjungan ke Rumah)</h4>
+          <p>Kunjungan perawatan langsung ke rumah pasien untuk pemasangan infus, perawatan luka, terapi bekam, cek lab darah, maupun kontrol rutin.</p>
+        </div>
+      </section>
+
+      <a href="#" target="_blank" rel="noopener" class="wa-float" id="btn-float-wa">
+        💬 Tanya Ns. Ahmad Fawaid
+      </a>
+    </div>
+
+    <!-- =========================================================
+         VIEW 2: RUANG KERJA & REKAP BULANAN (KHUSUS AHMAD FAWAID)
+         ========================================================= -->
+    <div id="admin-view" style="display: none;">
+      <div class="admin-toolbar">
+        <div class="month-picker-box">
+          <label for="month-selector">📅 Rekap Laporan Bulan:</label>
+          <input type="month" id="month-selector" />
+        </div>
+
+        <div class="nav-actions" style="flex-wrap: wrap;">
+          <button type="button" class="btn-nav" id="btn-settings">⚙️ Pengaturan WA & PIN</button>
+          <button type="button" class="btn-nav" id="btn-print">🖨️ Cetak Laporan Bulanan</button>
+          <button type="button" class="btn-nav" id="btn-export-csv">📊 Export Excel (CSV)</button>
+          <button type="button" class="btn-nav" id="btn-backup">↓ Backup</button>
+          <button type="button" class="btn-nav" id="btn-restore">↑ Restore</button>
+          <input type="file" id="file-restore" accept=".json" hidden />
+        </div>
+      </div>
+
+      <!-- KPI Akhir Bulan -->
+      <section class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-title"><span>Pasien Bulan Ini</span><span>🩺</span></div>
+          <div class="kpi-value" id="kpi-patients">0 Orang</div>
+          <div class="kpi-sub" id="kpi-avg">Rata-rata Rp 0 / pasien</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-title"><span>Pemasukan Sebulan</span><span>↗</span></div>
+          <div class="kpi-value text-income" id="kpi-income">Rp 0</div>
+          <div class="kpi-sub" id="kpi-month-label">Periode bulan terpilih</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-title"><span>Pengeluaran Sebulan</span><span>↘</span></div>
+          <div class="kpi-value text-expense" id="kpi-expense">Rp 0</div>
+          <div class="kpi-sub">Obat, alkes & operasional</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-title"><span>Pendapatan Bersih</span><span>💰</span></div>
+          <div class="kpi-value" id="kpi-balance">Rp 0</div>
+          <div class="kpi-sub" id="kpi-status">Total bersih akhir bulan</div>
+        </div>
+      </section>
+
+      <!-- Rincian Pendapatan per Tindakan di Akhir Bulan -->
+      <section class="recap-banner">
+        <div class="recap-top">
+          <h3>Rincian Pemasukan per Layanan (<span id="recap-month-title"></span>)</h3>
+          <span style="font-size: 0.8rem; color: var(--text-secondary);">Otomatis terakumulasi selama 1 bulan</span>
+        </div>
+        <div class="service-breakdown" id="service-breakdown"></div>
+      </section>
+
+      <!-- Input & Riwayat Bulanan -->
+      <div class="main-grid">
+        <section class="panel">
+          <div class="form-tabs">
+            <button type="button" class="tab-btn active-income" id="tab-income">+ Pasien Periksa</button>
+            <button type="button" class="tab-btn" id="tab-expense">- Pengeluaran</button>
+          </div>
+
+          <form id="form-income">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="inc-patient">Nama Pasien *</label>
+                <input type="text" id="inc-patient" placeholder="Contoh: Tn. Budi" required />
+              </div>
+              <div class="form-group">
+                <label for="inc-age">Usia / Alamat</label>
+                <input type="text" id="inc-age" placeholder="Contoh: 38 th" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="inc-service">Tindakan Keperawatan *</label>
+              <select id="inc-service">
+                <option value="Pemeriksaan Umum & TTV">Pemeriksaan Umum & TTV</option>
+                <option value="Perawatan Luka / Ganti Verban">Perawatan Luka / Ganti Verban</option>
+                <option value="Layanan Infus (Pemasangan / Lepas)">Layanan Infus (Pemasangan / Lepas)</option>
+                <option value="Terapi Bekam (Hijamah)">Terapi Bekam (Hijamah)</option>
+                <option value="Cek Gula / Kolesterol / Asam Urat">Cek Gula / Kolesterol / Asam Urat</option>
+                <option value="Terapi Uap / Nebulizer">Terapi Uap / Nebulizer</option>
+                <option value="Injeksi / Tindakan Medis">Injeksi / Tindakan Medis</option>
+                <option value="Kunjungan Rumah (Homecare)">Kunjungan Rumah (Homecare)</option>
+              </select>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="inc-amount">Tarif Periksa (Rp) *</label>
+                <input type="number" id="inc-amount" min="0" step="500" placeholder="50000" required />
+              </div>
+              <div class="form-group">
+                <label for="inc-method">Pembayaran</label>
+                <select id="inc-method">
+                  <option value="Tunai">Tunai</option>
+                  <option value="QRIS">QRIS</option>
+                  <option value="Transfer">Transfer</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="inc-date">Tanggal Periksa</label>
+              <input type="date" id="inc-date" required />
+            </div>
+
+            <button type="submit" class="btn-submit income">Simpan Data Pasien</button>
+          </form>
+
+          <form id="form-expense" style="display: none;">
+            <div class="form-group">
+              <label for="exp-title">Keperluan Pengeluaran *</label>
+              <input type="text" id="exp-title" placeholder="Contoh: Beli Kasa Steril, Cairan Infus & Jarum Bekam" required />
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="exp-category">Kategori</label>
+                <select id="exp-category">
+                  <option value="Alkes & BHP">Alkes & BHP</option>
+                  <option value="Stok Obat">Stok Obat</option>
+                  <option value="Operasional Praktik">Operasional Praktik</option>
+                  <option value="Transport Homecare">Transport Homecare</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="exp-amount">Nominal (Rp) *</label>
+                <input type="number" id="exp-amount" min="0" step="500" placeholder="100000" required />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="exp-date">Tanggal Pengeluaran</label>
+              <input type="date" id="exp-date" required />
+            </div>
+
+            <button type="submit" class="btn-submit expense">Simpan Pengeluaran</button>
+          </form>
+        </section>
+
+        <section class="panel">
+          <div class="recap-top">
+            <h3>Catatan Transaksi Bulan Terpilih</h3>
+            <span id="record-count" style="font-size: 0.8rem; color: var(--text-secondary);">0 data</span>
+          </div>
+
+          <div class="filter-controls">
+            <input type="text" id="search-input" placeholder="Cari nama pasien atau keterangan..." />
+            <select id="type-filter">
+              <option value="all">Semua Catatan</option>
+              <option value="income">Pasien & Pemasukan</option>
+              <option value="expense">Pengeluaran Saja</option>
+            </select>
+          </div>
+
+          <ul class="tx-list" id="tx-list"></ul>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Login PIN Perawat -->
+  <div class="modal-backdrop" id="pin-modal">
+    <div class="modal-box">
+      <h3>Login Ruang Kerja Perawat</h3>
+      <p>Khusus <strong>Ns. Ahmad Fawaid</strong>. Masukkan PIN untuk mengakses catatan pasien dan laporan keuangan.</p>
+      <form id="pin-form">
+        <div class="form-group">
+          <label for="pin-input">PIN Keamanan (Default: 1234)</label>
+          <input type="password" id="pin-input" maxlength="8" placeholder="••••" required />
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-nav" id="btn-close-pin">Batal</button>
+          <button type="submit" class="btn-nav primary">Masuk Dashboard</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Pengaturan Praktik -->
+  <div class="modal-backdrop" id="settings-modal">
+    <div class="modal-box">
+      <h3>Pengaturan Praktik & WhatsApp</h3>
+      <p>Atur nomor WhatsApp tujuan booking pasien, informasi praktik, dan PIN akses.</p>
+      <form id="settings-form">
+        <div class="form-group">
+          <label for="set-wa">Nomor WhatsApp Praktik (Contoh: 081234567890)</label>
+          <input type="tel" id="set-wa" required />
+        </div>
+        <div class="form-group">
+          <label for="set-hours">Jam Praktik</label>
+          <input type="text" id="set-hours" required />
+        </div>
+        <div class="form-group">
+          <label for="set-address">Alamat Praktik</label>
+          <input type="text" id="set-address" required />
+        </div>
+        <div class="form-group">
+          <label for="set-pin">PIN Login Perawat</label>
+          <input type="text" id="set-pin" maxlength="8" required />
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-nav" id="btn-close-settings">Batal</button>
+          <button type="submit" class="btn-nav primary">Simpan Pengaturan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Konfigurasi Default Praktik Ns. Ahmad Fawaid
+    const DEFAULT_CONFIG = {
+      nurseName: 'Ns. Ahmad Fawaid',
+      waNumber: '6281234567890',
+      hours: 'Setiap Hari, 07.00 – 21.00 WIB',
+      address: 'Klinik Praktik Mandiri Ns. Ahmad Fawaid',
+      pin: '1234'
+    };
+
+    class FawaidClinicApp {
+      constructor() {
+        this.records = JSON.parse(localStorage.getItem('fawaid_clinic_records')) || [];
+        this.config = {
+          ...DEFAULT_CONFIG,
+          ...(JSON.parse(localStorage.getItem('fawaid_clinic_config')) || {})
+        };
+        this.isAdmin = false;
+        this.selectedMonth = new Date().toISOString().slice(0, 7); // YYYY-MM
+        this.typeFilter = 'all';
+        this.searchQuery = '';
+      }
+
+      saveRecords() {
+        localStorage.setItem('fawaid_clinic_records', JSON.stringify(this.records));
+      }
+
+      saveConfig() {
+        localStorage.setItem('fawaid_clinic_config', JSON.stringify(this.config));
+      }
+
+      normalizeWA(rawPhone) {
+        let digits = String(rawPhone || '').replace(/\D/g, '');
+        if (digits.startsWith('0')) digits = '62' + digits.slice(1);
+        if (!digits.startsWith('62')) digits = '62' + digits;
+        return digits;
+      }
+
+      getMonthRecords() {
+        return this.records.filter((r) => r.date && r.date.startsWith(this.selectedMonth));
+      }
+    }
+
+    const app = new FawaidClinicApp();
+
+    const formatIDR = (num) =>
+      new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR',
+        maximumFractionDigits: 0
+      }).format(num || 0);
+
+    const formatMonthIndo = (ym) => {
+      const [y, m] = ym.split('-');
+      const d = new Date(Number(y), Number(m) - 1, 1);
+      return d.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
+    };
+
+    function showToast(msg) {
+      const t = document.createElement('div');
+      t.className = 'toast';
+      t.textContent = msg;
+      document.body.appendChild(t);
+      setTimeout(() => t.remove(), 3000);
+    }
+
+    function escapeHTML(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    // Sinkronisasi Tampilan Portal Publik (WA & Info Praktik)
+    function syncPublicPortal() {
+      document.getElementById('display-hours').textContent = app.config.hours;
+      document.getElementById('display-address').textContent = app.config.address;
+
+      const waClean = app.normalizeWA(app.config.waNumber);
+      const greeting = encodeURIComponent(
+        `Halo Ns. Ahmad Fawaid, saya ingin berkonsultasi / menanyakan jadwal pemeriksaan kesehatan.`
+      );
+      const directUrl = `https://wa.me/${waClean}?text=${greeting}`;
+      document.getElementById('btn-direct-wa').href = directUrl;
+      document.getElementById('btn-float-wa').href = directUrl;
+    }
+
+    // Kirim Form Pendaftaran Pasien ke WhatsApp
+    document.getElementById('wa-booking-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('pt-name').value.trim();
+      const service = document.getElementById('pt-service').value;
+      const complaint = document.getElementById('pt-complaint').value.trim();
+      const waClean = app.normalizeWA(app.config.waNumber);
+
+      const message =
+        `Halo *Ns. Ahmad Fawaid*, saya ingin mendaftar pemeriksaan:\n\n` +
+        `• *Nama Pasien:* ${name}\n` +
+        `• *Layanan:* ${service}\n` +
+        `• *Keluhan / Jadwal:* ${complaint || '-'}\n\n` +
+        `Mohon konfirmasi ketersediaan waktunya. Terima kasih.`;
+
+      window.open(`https://wa.me/${waClean}?text=${encodeURIComponent(message)}`, '_blank', 'noopener');
+    });
+
+    // Mode Switcher (Publik <-> Perawat)
+    const publicView = document.getElementById('public-view');
+    const adminView = document.getElementById('admin-view');
+    const btnModeSwitch = document.getElementById('btn-mode-switch');
+    const pinModal = document.getElementById('pin-modal');
+
+    btnModeSwitch.addEventListener('click', () => {
+      if (app.isAdmin) {
+        app.isAdmin = false;
+        adminView.style.display = 'none';
+        publicView.style.display = 'block';
+        btnModeSwitch.textContent = '🔐 Mode Perawat';
+      } else {
+        document.getElementById('pin-input').value = '';
+        pinModal.classList.add('open');
+        setTimeout(() => document.getElementById('pin-input').focus(), 100);
+      }
+    });
+
+    document.getElementById('btn-close-pin').addEventListener('click', () => {
+      pinModal.classList.remove('open');
+    });
+
+    document.getElementById('pin-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const entered = document.getElementById('pin-input').value.trim();
+      if (entered === app.config.pin) {
+        app.isAdmin = true;
+        pinModal.classList.remove('open');
+        publicView.style.display = 'none';
+        adminView.style.display = 'block';
+        btnModeSwitch.textContent = '← Halaman Pasien';
+        renderAdmin();
+        showToast('Selamat datang, Ns. Ahmad Fawaid');
+      } else {
+        showToast('PIN salah. Silakan coba lagi.');
+      }
+    });
+
+    // Pengaturan WA & PIN
+    const settingsModal = document.getElementById('settings-modal');
+    document.getElementById('btn-settings').addEventListener('click', () => {
+      document.getElementById('set-wa').value = app.config.waNumber;
+      document.getElementById('set-hours').value = app.config.hours;
+      document.getElementById('set-address').value = app.config.address;
+      document.getElementById('set-pin').value = app.config.pin;
+      settingsModal.classList.add('open');
+    });
+
+    document.getElementById('btn-close-settings').addEventListener('click', () => {
+      settingsModal.classList.remove('open');
+    });
+
+    document.getElementById('settings-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      app.config.waNumber = document.getElementById('set-wa').value.trim();
+      app.config.hours = document.getElementById('set-hours').value.trim();
+      app.config.address = document.getElementById('set-address').value.trim();
+      app.config.pin = document.getElementById('set-pin').value.trim() || '1234';
+      app.saveConfig();
+      syncPublicPortal();
+      settingsModal.classList.remove('open');
+      showToast('Pengaturan praktik berhasil diperbarui');
+    });
+
+    // Render Dashboard Rekap Akhir Bulan
+    function renderAdmin() {
+      const monthData = app.getMonthRecords();
+      const monthLabel = formatMonthIndo(app.selectedMonth);
+
+      const patients = monthData.filter((r) => r.type === 'income');
+      const expenses = monthData.filter((r) => r.type === 'expense');
+
+      const totalIncome = patients.reduce((s, r) => s + Number(r.amount || 0), 0);
+      const totalExpense = expenses.reduce((s, r) => s + Number(r.amount || 0), 0);
+      const netIncome = totalIncome - totalExpense;
+      const avgPerPatient = patients.length > 0 ? Math.round(totalIncome / patients.length) : 0;
+
+      document.getElementById('kpi-patients').textContent = `${patients.length} Orang`;
+      document.getElementById('kpi-avg').textContent = `Rata-rata ${formatIDR(avgPerPatient)} / pasien`;
+      document.getElementById('kpi-income').textContent = formatIDR(totalIncome);
+      document.getElementById('kpi-month-label').textContent = monthLabel;
+      document.getElementById('kpi-expense').textContent = formatIDR(totalExpense);
+
+      const balEl = document.getElementById('kpi-balance');
+      balEl.textContent = formatIDR(netIncome);
+      balEl.className = `kpi-value ${netIncome >= 0 ? 'text-income' : 'text-expense'}`;
+      document.getElementById('kpi-status').textContent =
+        netIncome >= 0 ? `Laba bersih ${monthLabel}` : `Defisit pada ${monthLabel}`;
+
+      // Rincian Pendapatan per Tindakan di Bulan Tersebut
+      document.getElementById('recap-month-title').textContent = monthLabel;
+      const breakdownEl = document.getElementById('service-breakdown');
+      breakdownEl.innerHTML = '';
+
+      if (patients.length === 0) {
+        breakdownEl.innerHTML = `<div style="font-size:0.82rem; color:var(--text-muted);">Belum ada data pemeriksaan pasien pada ${monthLabel}.</div>`;
+      } else {
+        const grouped = {};
+        patients.forEach((p) => {
+          if (!grouped[p.service]) grouped[p.service] = { count: 0, total: 0 };
+          grouped[p.service].count += 1;
+          grouped[p.service].total += Number(p.amount || 0);
+        });
+
+        Object.entries(grouped).forEach(([srv, stat]) => {
+          const chip = document.createElement('div');
+          chip.className = 'breakdown-chip';
+          chip.innerHTML = `
+            <span>${escapeHTML(srv)} (${stat.count}x)</span>
+            <strong>${formatIDR(stat.total)}</strong>
+          `;
+          breakdownEl.appendChild(chip);
+        });
+      }
+
+      // Filter Riwayat Transaksi Bulan Terpilih
+      const q = app.searchQuery.toLowerCase();
+      const filtered = monthData.filter((r) => {
+        const matchType = app.typeFilter === 'all' || r.type === app.typeFilter;
+        const text = [r.patientName, r.service, r.title, r.category, r.paymentMethod]
+          .filter(Boolean)
+          .join(' ')
+          .toLowerCase();
+        return matchType && text.includes(q);
+      });
+
+      document.getElementById('record-count').textContent = `${filtered.length} catatan`;
+      const listEl = document.getElementById('tx-list');
+      listEl.innerHTML = '';
+
+      if (filtered.length === 0) {
+        listEl.innerHTML = `<li class="empty-box">Tidak ada transaksi ditemukan pada ${monthLabel}.</li>`;
+        return;
+      }
+
+      filtered.forEach((item) => {
+        const li = document.createElement('li');
+        li.className = 'tx-item';
+        const isIncome = item.type === 'income';
+        const title = isIncome
+          ? `${item.patientName}${item.patientAge ? ` (${item.patientAge})` : ''}`
+          : item.title;
+
+        li.innerHTML = `
+          <div class="tx-left">
+            <div class="tx-badge-icon ${item.type}">${isIncome ? '🩺' : '📦'}</div>
+            <div>
+              <div class="tx-title">${escapeHTML(title)}</div>
+              <div class="tx-meta">
+                <span class="tag">${escapeHTML(isIncome ? item.service : item.category)}</span>
+                ${isIncome ? `<span class="tag">${item.paymentMethod}</span>` : ''}
+                <span>📅 ${item.date}</span>
+              </div>
+            </div>
+          </div>
+          <div class="tx-right">
+            <div class="tx-amount ${isIncome ? 'text-income' : 'text-expense'}">
+              ${isIncome ? '+' : '-'} ${formatIDR(item.amount)}
+            </div>
+            <button type="button" class="btn-del" data-id="${item.id}">Hapus</button>
+          </div>
+        `;
+        listEl.appendChild(li);
+      });
+    }
+
+    // Inisialisasi Tanggal & Bulan
+    const todayISO = new Date().toISOString().slice(0, 10);
+    document.getElementById('inc-date').value = todayISO;
+    document.getElementById('exp-date').value = todayISO;
+
+    const monthSelector = document.getElementById('month-selector');
+    monthSelector.value = app.selectedMonth;
+    monthSelector.addEventListener('change', (e) => {
+      if (e.target.value) {
+        app.selectedMonth = e.target.value;
+        renderAdmin();
+      }
+    });
+
+    // Switch Form Pasien vs Pengeluaran
+    const tabIncome = document.getElementById('tab-income');
+    const tabExpense = document.getElementById('tab-expense');
+    const formIncome = document.getElementById('form-income');
+    const formExpense = document.getElementById('form-expense');
+
+    tabIncome.addEventListener('click', () => {
+      tabIncome.className = 'tab-btn active-income';
+      tabExpense.className = 'tab-btn';
+      formIncome.style.display = 'block';
+      formExpense.style.display = 'none';
+    });
+
+    tabExpense.addEventListener('click', () => {
+      tabExpense.className = 'tab-btn active-expense';
+      tabIncome.className = 'tab-btn';
+      formExpense.style.display = 'block';
+      formIncome.style.display = 'none';
+    });
+
+    // Simpan Data Pasien
+    formIncome.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const dateVal = document.getElementById('inc-date').value;
+      app.records.unshift({
+        id: Date.now(),
+        type: 'income',
+        patientName: document.getElementById('inc-patient').value.trim(),
+        patientAge: document.getElementById('inc-age').value.trim(),
+        service: document.getElementById('inc-service').value,
+        amount: Number(document.getElementById('inc-amount').value),
+        paymentMethod: document.getElementById('inc-method').value,
+        date: dateVal
+      });
+      app.saveRecords();
+      app.selectedMonth = dateVal.slice(0, 7);
+      monthSelector.value = app.selectedMonth;
+      document.getElementById('inc-patient').value = '';
+      document.getElementById('inc-age').value = '';
+      document.getElementById('inc-amount').value = '';
+      renderAdmin();
+      showToast('Data pemeriksaan pasien tersimpan');
+    });
+
+    // Simpan Data Pengeluaran
+    formExpense.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const dateVal = document.getElementById('exp-date').value;
+      app.records.unshift({
+        id: Date.now(),
+        type: 'expense',
+        title: document.getElementById('exp-title').value.trim(),
+        category: document.getElementById('exp-category').value,
+        amount: Number(document.getElementById('exp-amount').value),
+        date: dateVal
+      });
+      app.saveRecords();
+      app.selectedMonth = dateVal.slice(0, 7);
+      monthSelector.value = app.selectedMonth;
+      document.getElementById('exp-title').value = '';
+      document.getElementById('exp-amount').value = '';
+      renderAdmin();
+      showToast('Pengeluaran berhasil dicatat');
+    });
+
+    // Hapus Transaksi
+    document.getElementById('tx-list').addEventListener('click', (e) => {
+      if (e.target.classList.contains('btn-del')) {
+        const id = Number(e.target.dataset.id);
+        app.records = app.records.filter((r) => r.id !== id);
+        app.saveRecords();
+        renderAdmin();
+        showToast('Catatan dihapus');
+      }
+    });
+
+    // Search & Filter
+    document.getElementById('search-input').addEventListener('input', (e) => {
+      app.searchQuery = e.target.value;
+      renderAdmin();
+    });
+
+    document.getElementById('type-filter').addEventListener('change', (e) => {
+      app.typeFilter = e.target.value;
+      renderAdmin();
+    });
+
+    // Cetak Laporan Akhir Bulan
+    document.getElementById('btn-print').addEventListener('click', () => window.print());
+
+    // Export Excel (CSV) Bulan Terpilih
+    document.getElementById('btn-export-csv').addEventListener('click', () => {
+      const monthData = app.getMonthRecords();
+      if (monthData.length === 0) {
+        showToast('Tidak ada data pada bulan terpilih');
+        return;
+      }
+      const headers = ['Tanggal', 'Jenis', 'Pasien / Keterangan', 'Tindakan / Kategori', 'Metode Bayar', 'Nominal (Rp)'];
+      const rows = monthData.map((r) => [
+        r.date,
+        r.type === 'income' ? 'Pemasukan' : 'Pengeluaran',
+        `"${(r.type === 'income' ? `${r.patientName} (${r.patientAge || '-'})` : r.title).replace(/"/g, '""')}"`,
+        `"${(r.type === 'income' ? r.service : r.category).replace(/"/g, '""')}"`,
+        r.paymentMethod || '-',
+        r.type === 'income' ? r.amount : -r.amount
+      ]);
+      const csv = '\uFEFF' + [headers.join(';'), ...rows.map((e) => e.join(';'))].join('\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Laporan-Ns-Ahmad-Fawaid-${app.selectedMonth}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('Laporan bulanan Excel (CSV) diunduh');
+    });
+
+    // Backup & Restore JSON
+    document.getElementById('btn-backup').addEventListener('click', () => {
+      const blob = new Blob([JSON.stringify(app.records, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Backup-Ns-Ahmad-Fawaid-${todayISO}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('File backup diunduh');
+    });
+
+    const fileRestore = document.getElementById('file-restore');
+    document.getElementById('btn-restore').addEventListener('click', () => fileRestore.click());
+    fileRestore.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        try {
+          const parsed = JSON.parse(ev.target.result);
+          if (Array.isArray(parsed)) {
+            app.records = parsed;
+            app.saveRecords();
+            renderAdmin();
+            showToast('Data berhasil dipulihkan');
+          }
+        } catch {
+          showToast('File backup tidak valid');
+        }
+      };
+      reader.readAsText(file);
+      fileRestore.value = '';
+    });
+
+    // Theme Toggle
+    const savedTheme = localStorage.getItem('fawaid_theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    document.getElementById('btn-theme').addEventListener('click', () => {
+      const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('fawaid_theme', next);
+    });
+
+    syncPublicPortal();
+  </script>
+</body>
+</html>
